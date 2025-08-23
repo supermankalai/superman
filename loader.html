@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0b0f1a;
+        }
+        img {
+            width: 150px; /* Adjust size as needed */
+        }
+    </style>
+</head>
+<body>
+    <img src="images/superlogo.png" alt="Loading...">
+    <script>
+        setTimeout(() => {
+            window.location.href = document.referrer; // Redirect to the previous page
+        }, 500); // 0.5 seconds
+    </script>
+</body>
+</html>

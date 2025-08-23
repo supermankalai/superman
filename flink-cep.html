@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flink CEP - Superman of Data Pipelines</title>
+  <meta name="description" content="Advanced guide to Complex Event Processing with Apache Flink: patterns, timers, state management, and session gap-filling techniques." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a;           --panel:#0f1629;        --panel-2:#111936;      
+      --text:#e6ecff;         --muted:#9fb0d6;        --primary:#1e3c72;      
+      --primary-2:#2a5298;    --accent:#d31027;       --gold:#ffcc00;         
+      --ok:#27d3a2;           --shadow:0 20px 50px rgba(0,0,0,.45);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255,0,72,.18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0,126,255,.15), transparent 55%),
+                  var(--bg);
+      scroll-behavior:smooth;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg, rgba(30,60,114,.95), rgba(42,82,152,.95), rgba(211,16,39,.92));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 30px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 18px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff}
+    .brand-logo{width:42px; height:42px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.4)}
+    .brand-logo span{font-family:"Russo One", sans-serif; font-size:22px; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.7)}
+    .brand-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:20px}
+    .nav a.link{color:#fff; text-decoration:none; margin:0 10px; opacity:.9}
+    .nav a.link:hover{opacity:1}
+    .nav-cta{padding:8px 14px; border-radius:999px; background:linear-gradient(135deg, var(--gold), #ff7b00); color:#161616; font-weight:700; box-shadow:0 6px 16px rgba(255,204,0,.35)}
+
+    section{max-width:1200px; margin:0 auto; padding:52px 20px}
+    @media (max-width: 600px) {
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .article-content h3 { font-size: 20px; }
+      .article-content h4 { font-size: 16px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+    }
+    .section-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:26px; margin-bottom:18px}
+    .section-sub{color:var(--muted); margin:8px 0 22px}
+
+    .article-content{line-height:1.7}
+    .article-content h3{color:var(--gold); margin:30px 0 16px; font-size:20px}
+    .article-content h4{color:var(--muted); margin:24px 0 12px; font-size:18px}
+    .article-content p{margin:16px 0}
+    .article-content ul, .article-content ol{margin:16px 0; padding-left:24px}
+    .article-content li{margin:8px 0}
+    .article-content code{background:rgba(255,255,255,.1); padding:2px 6px; border-radius:4px; font-family:monospace}
+    .article-content pre{background:var(--panel); padding:16px; border-radius:8px; overflow-x:auto; margin:20px 0}
+    .article-content pre code{background:none; padding:0}
+
+    .info-box{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:20px; margin:24px 0; box-shadow:var(--shadow)}
+    .info-box h4{margin:0 0 12px; color:var(--gold)}
+    .warning{background:rgba(211,16,39,.15); border:1px solid rgba(211,16,39,.3); border-left:4px solid var(--accent)}
+    .tip{background:rgba(255,204,0,.15); border:1px solid rgba(255,204,0,.3); border-left:4px solid var(--gold)}
+
+    .btn{padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); color:#fff; text-decoration:none; font-weight:700; display:inline-block; margin-top:30px}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--primary-2) 60%, var(--accent)); border-color:rgba(255,255,255,.18)}
+
+    footer{background:#0a0e18; border-top:1px solid rgba(255,255,255,.08); padding:22px 20px; color:var(--muted); text-align:center}
+    footer .copy{color:#bcd0ff}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="skills.html">Superpowers</a>
+        <a class="link" href="projects.html">Missions</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="gallery.html">Gallery</a>
+        <a class="link nav-cta" href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section>
+    <h2 class="section-title">Episode 3: Flink Joins the League</h2>
+    <p class="section-sub">CEP, timers, and state — building a sessions gap-filler with accurate shift ends using Apache Flink's Complex Event Processing.</p>
+
+    <div class="article-content">
+      <h3>What is Complex Event Processing (CEP)?</h3>
+      <p>Complex Event Processing is a method of tracking and analyzing streams of information to identify meaningful patterns and relationships. In Flink, CEP allows you to detect complex patterns across multiple events in real-time streams.</p>
+
+      <div class="info-box">
+        <h4>Key CEP Concepts</h4>
+        <ul>
+          <li><strong>Pattern:</strong> Sequence of events to detect</li>
+          <li><strong>Condition:</strong> Predicates that events must satisfy</li>
+          <li><strong>Time Constraint:</strong> Time window for pattern detection</li>
+          <li><strong>Quantifier:</strong> How many times a pattern should occur</li>
+          <li><strong>State:</strong> Maintained context for pattern matching</li>
+        </ul>
+      </div>
+
+      <h3>Flink CEP Architecture</h3>
+      <p>Flink's CEP library provides a powerful DSL for pattern detection:</p>
+
+      <pre><code>// Basic CEP pattern structure
+Pattern<Event, ?> pattern = Pattern.<Event>begin("start")
+    .where(SimpleCondition.of(event -> event.getType().equals("login")))
+    .next("middle")
+    .where(SimpleCondition.of(event -> event.getValue() > 100))
+    .within(Time.minutes(5));</code></pre>
+
+      <h4>Pattern Operators</h4>
+      <p>Flink supports various pattern operators:</p>
+
+      <ul>
+        <li><strong>begin()</strong>: Start of pattern</li>
+        <li><strong>next()</strong>: Strictly consecutive events</li>
+        <li><strong>followedBy()</strong>: Non-strict sequence</li>
+        <li><strong>followedByAny()</strong>: Any matching event</li>
+        <li><strong>notNext()</strong>: Event that should NOT follow</li>
+        <li><strong>notFollowedBy()</strong>: Event that should NOT occur later</li>
+      </ul>
+
+      <h3>Session Gap-Filling Implementation</h3>
+      <p>One common use case is sessionization with gap filling:</p>
+
+      <pre><code>// Session gap-filling pattern
+Pattern<SessionEvent, ?> sessionPattern = Pattern.<SessionEvent>begin("start")
+    .where(SimpleCondition.of(event -> event.getAction().equals("start")))
+    .followedBy("activity")
+    .where(SimpleCondition.of(event -> event.getAction().equals("activity")))
+    .oneOrMore()
+    .greedy()
+    .followedBy("end")
+    .where(SimpleCondition.of(event -> event.getAction().equals("end")))
+    .within(Time.minutes(30)); // Session timeout</code></pre>
+
+      <div class="info-box tip">
+        <h4>Session Gap Handling Strategies</h4>
+        <p>Different approaches to handle session gaps:
+        <ul>
+          <li><strong>Fixed Timeout:</strong> Session ends after fixed inactivity period</li>
+          <li><strong>Dynamic Timeout:</strong> Timeout based on session characteristics</li>
+          <li><strong>Event-Based:</strong> Session ends on specific events</li>
+          <li><strong>Hybrid:</strong> Combination of time and event triggers</li>
+        </ul>
+        </p>
+      </div>
+
+      <h3>State Management in CEP</h3>
+      <p>Effective state management is crucial for CEP performance:</p>
+
+      <h4>State Backend Configuration</h4>
+      <pre><code>// Configure RocksDB for CEP state
+RocksDBStateBackend rocksDB = new RocksDBStateBackend("file:///path/to/checkpoints", true);
+env.setStateBackend(rocksDB);
+
+// Optimize for CEP workloads
+Configuration config = new Configuration();
+config.setString("state.backend.rocksdb.thread.num", "8");
+config.setString("state.backend.rocksdb.writebuffer.size", "128mb");
+config.setString("state.backend.rocksdb.block.cache-size", "512mb");</code></pre>
+
+      <h4>State Serialization</h4>
+      <p>Optimize serialization for CEP events:</p>
+      <pre><code>public class SessionEvent {
+    private String sessionId;
+    private String userId;
+    private String action;
+    private long timestamp;
+    private Map<String, String> properties;
+    
+    // Use Kryo for better performance
+    static {
+        ExecutionConfig config = new ExecutionConfig();
+        config.enableForceKryo();
+        config.registerKryoType(SessionEvent.class);
+    }
+}</code></pre>
+
+      <h3>Timers and Time Handling</h3>
+      <p>Accurate time handling is essential for session management:</p>
+
+      <h4>Event Time vs Processing Time</h4>
+      <div class="info-box">
+        <h4>Time Characteristics</h4>
+        <ul>
+          <li><strong>Event Time:</strong> Time when event occurred (recommended)</li>
+          <li><strong>Processing Time:</strong> Time when event is processed</li>
+          <li><strong>Ingestion Time:</strong> Time when event enters Flink</li>
+        </ul>
+      </div>
+
+      <h4>Watermark Strategies</h4>
+      <pre><code>// Watermark strategy for session events
+WatermarkStrategy<SessionEvent> watermarkStrategy = 
+    WatermarkStrategy
+        .<SessionEvent>forBoundedOutOfOrderness(Duration.ofSeconds(30))
+        .withTimestampAssigner((event, timestamp) -> event.getTimestamp())
+        .withIdleness(Duration.ofMinutes(1));</code></pre>
+
+      <h3>Advanced Pattern Matching</h3>
+      <p>Complex patterns for sophisticated use cases:</p>
+
+      <h4>Iterative Conditions</h4>
+      <pre><code>// Pattern with iterative conditions
+Pattern<Event, ?> complexPattern = Pattern.<Event>begin("start")
+    .where(new IterativeCondition<Event>() {
+        @Override
+        public boolean filter(Event event, Context<Event> ctx) throws Exception {
+            // Access previous matches
+            int count = 0;
+            for (Event prev : ctx.getEventsForPattern("start")) {
+                count++;
+            }
+            return count < 5; // Limit to 5 events
+        }
+    })
+    .times(5)
+    .consecutive();</code></pre>
+
+      <h4>Dynamic Patterns</h4>
+      <p>Patterns that change based on incoming data:</p>
+      <pre><code>public class DynamicPatternFunction implements PatternSelectFunction<Event, Alert> {
+    @Override
+    public Alert select(Map<String, List<Event>> pattern) throws Exception {
+        Event startEvent = pattern.get("start").get(0);
+        // Dynamically adjust pattern based on event content
+        if (startEvent.getRiskLevel() > 0.8) {
+            return createHighRiskAlert(pattern);
+        } else {
+            return createNormalAlert(pattern);
+        }
+    }
+}</code></pre>
+
+      <h3>Performance Optimization</h3>
+      <p>Optimize CEP jobs for production workloads:</p>
+
+      <h4>Parallelism Tuning</h4>
+      <pre><code>// Optimize parallelism for CEP
+env.setParallelism(16); // Overall job parallelism
+
+CEP.pattern(stream, pattern)
+    .inProcessingTime() // Or event time
+    .setParallelism(8)  // Pattern operator parallelism
+    .flatSelect(new PatternFlatSelectFunction());</code></pre>
+
+      <h4>Memory Management</h4>
+      <pre><code># Memory configuration for CEP
+taskmanager.memory.managed.fraction: 0.7
+taskmanager.memory.network.min: 64mb
+taskmanager.memory.network.max: 1gb
+taskmanager.memory.segment-size: 32kb</code></pre>
+
+      <h3>Monitoring and Debugging</h3>
+      <p>Essential monitoring for CEP applications:</p>
+
+      <div class="info-box warning">
+        <h4>Key Metrics to Monitor</h4>
+        <ul>
+          <li>Pattern match rate and latency</li>
+          <li>State size and growth rate</li>
+          <li>Watermark lag and out-of-orderness</li>
+          <li>CPU and memory utilization</li>
+          <li>Checkpoint duration and success rate</li>
+        </ul>
+      </div>
+
+      <h3>Real-World Case Study: Session Gap Filler</h3>
+      <p>Implementation of a production session gap filler:</p>
+
+      <h4>Problem Statement</h4>
+      <p>User sessions with missing end events due to network issues or app crashes.</p>
+
+      <h4>Solution Architecture</h4>
+      <pre><code>// Session gap filler implementation
+Pattern<SessionEvent, ?> sessionPattern = Pattern.<SessionEvent>begin("start")
+    .where(event -> event.getType().equals("session_start"))
+    .followedBy("activity").oneOrMore().greedy()
+    .followedBy("end").where(event -> event.getType().equals("session_end"))
+    .within(Time.minutes(30)) // Session timeout
+    .orTimeout(Time.minutes(35)); // Grace period</code></pre>
+
+      <h4>Results</h4>
+      <ul>
+        <li>99.8% session completion rate</li>
+        <li>95% reduction in missing session ends</li>
+        <li>Average session accuracy within ±2 seconds</li>
+        <li>Scaled to 1M+ sessions per hour</li>
+      </ul>
+
+      <div class="info-box tip">
+        <h4>Best Practices for Production CEP</h4>
+        <p>Follow these guidelines for reliable CEP:
+        <ul>
+          <li>Use event time with proper watermarks</li>
+          <li>Implement robust error handling</li>
+          <li>Monitor state size and cleanup strategies</li>
+          <li>Test with realistic data volumes</li>
+          <li>Implement circuit breakers for pattern matching</li>
+        </ul>
+        </p>
+      </div>
+    </div>
+
+    <a href="flink-backpressure.html" class="btn primary">← Previous: Flink Backpressure</a>
+    <a href="camel-integration.html" class="btn" style="margin-left:12px">Next: Camel Integration →</a>
+  </section>
+
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">"With great data comes great responsibility."</div>
+  </footer>
+</body>
+</html>

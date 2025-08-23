@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Advanced Kafka Concepts - Superman of Data Pipelines</title>
+  <meta name="description" content="Advanced Kafka topics including partitioning strategies, consumer groups, exactly-once semantics, and performance optimization." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;极800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --panel: #0f1629;
+      --panel-2: #111936;
+      --text: #e6ecff;
+      --muted: #9fb0d6;
+      --primary: #1e3c72;
+      --primary-2: #2a5298;
+      --accent: #d31027;
+      --gold: #ffcc00;
+      --ok: #27d3a2;
+      --shadow: 0 20px 50px rgba(0, 0, 0, .45);
+      --radius: 极20px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255, 0, 72, .18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0, 126, 255, .15), transparent 55%),
+                  var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(90deg, rgba(30, 60, 114, .95), rgba(42, 82, 152, .95), rgba(211, 16, 39, .92));
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, .25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; }
+    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff; }
+    .brand-logo { width: 42px; height: 42极px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display: grid; place-items: center; box-shadow: 0 6px 极18px rgba(0, 0, 0, .4); }
+    .brand-logo span { font-family: "Russo One", sans-serif; font-size: 22px; color: #111; text-shadow: 0 1px 0 rgba(255, 255, 255, .7); }
+    .brand-title { font-family: "Russo One", sans-serif; letter-spacing: .5px; font-size: 20px; }
+    .nav a.link { color: #fff; text-decoration: none; margin: 0 10px; opacity: .9; }
+    .nav a.link:hover { opacity: 1; }
+    .nav-cta { padding: 8px 14px; border-radius: 999px; background: linear-gradient(135deg, var(--gold), #ff7b00); color: #161616; font-weight: 700; box-shadow: 0 6px 16px rgba(255, 204, 0, .35); }
+
+    section { max-width: 1200px; margin: 0 auto; padding: 52px 20px; }
+    .section-title { font-family: "Russo One", sans-serif; letter-spacing: .5px; font-size: 26px; margin-bottom: 18px; }
+    .section-sub { color: var(--muted); margin: 8px 0 22px; }
+
+    .content-card { background: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02)); border: 1px solid rgba(255, 255, 255, .08); border-radius: var(--radius); padding: 34px; box-shadow: var(--shadow); margin-bottom: 30px; }
+    .code-block { background: #0a0e18; border: 1px solid rgba(255, 255, 255, .08); border-radius: 12px; padding: 20px; overflow-x: auto; margin: 20px 0; }
+    .code-block pre { margin: 0; font-family: 'Fira Code', 'Monaco', 'Consolas', monospace; font-size: 14px; line-height: 1.5; }
+    .btn { padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, .14); background: linear-gradient(180deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .03)); color: #fff; text-decoration: none; font-weight: 700极; display: inline-block; margin-top: 20px; }
+    .btn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-2) 60%, var(--accent)); border-color: rgba(255, 255, 255, .18); }
+
+    footer { background: #0a0e18; border-top: 1px solid rgba(255, 255, 255, .08); padding: 22px 20px; color: var(--muted); text-align: center; }
+    footer .copy { color: #bcd0ff; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="skills.html">Superpowers</a>
+        <a class="link" href="projects.html">Missions</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="gallery.html">Gallery</a>
+        <a class="link nav-cta" href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section>
+    <h2 class="section-title">Advanced Kafka Concepts</h2>
+    <p class="section-sub">Advanced Kafka topics including partitioning strategies, consumer groups, exactly-once semantics, and performance optimization.</p>
+
+    <div class="content-card">
+      <h3>Partitioning Strategies</h3>
+      <p>Effective partitioning is crucial for Kafka performance and scalability. Different strategies serve different use cases:</p>
+      
+      <h4>Key-based Partitioning:</h4>
+      <ul>
+        <li>Ensures ordering for related messages</li>
+        <li>Ideal for stateful processing</li>
+        <li>Requires careful key selection</li>
+      </ul>
+
+      <h4>Round-robin Partitioning:</h4>
+      <ul>
+        <li>Even distribution across partitions</li>
+        <li>Good for stateless processing</li>
+        <极li>No ordering guarantees</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Consumer Groups and Rebalancing</h3>
+      <p>Consumer groups enable parallel processing while maintaining message ordering within partitions:</p>
+      
+      <div class="code-block">
+        <pre># Consumer Group Configuration
+group.id=my-consumer-group
+auto.offset.reset=earliest
+enable.auto.commit=false
+极max.poll.records=500
+max.poll.interval.ms=300000</pre>
+      </div>
+
+      <h4>Rebalancing Strategies:</h4>
+      <ul>
+        <li>Eager rebalancing for immediate redistribution</li>
+        <li>Incremental cooperative rebalancing for minimal disruption</li>
+        <li>Static membership for stable consumer assignments</li>
+      </ul>
+    </div>
+
+    <div class="content-card">
+      <h3>Exactly-Once Semantics</h3>
+      <p>Kafka provides transactional guarantees for exactly-once processing:</p>
+      
+      <h4>Transactional Producers:</h4>
+      <ul>
+        <li>Enable.idempotence=true for deduplication</li>
+        <li>Transactional.id for cross-partition atomicity</li>
+        <li>Commit and abort semantics</li>
+      </ul>
+
+      <h4>Transactional Consumers:</h4>
+      <ul>
+        <li>Read committed messages only</li>
+        <li>Isolation level configuration</li>
+        <li>Offset management within transactions</li>
+      </ul>
+    </div>
+
+    <a href="index.html" class="btn primary">← Back to Home</a>
+  </section>
+
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">"With great data comes great responsibility."</div>
+  </footer>
+</body>
+</html>

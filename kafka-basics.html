@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kafka Basics - Superman of Data Pipelines</title>
+  <meta name="description" content="Comprehensive guide to Apache Kafka fundamentals: architecture, topics, partitions, producers, consumers, and best practices for data streaming." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a;           --panel:#0f1629;        --panel-2:#111936;      
+      --text:#e6ecff;         --muted:#9fb0d6;        --primary:#1e3c72;      
+      --primary-2:#2a5298;    --accent:#d31027;       --gold:#ffcc00;         
+      --ok:#27d3a2;           --shadow:0 20px 50px rgba(0,0,0,.45);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255,0,72,.18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0,126,255,.15), transparent 55%),
+                  var(--bg);
+      scroll-behavior:smooth;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg, rgba(30,60,114,.95), rgba(42,82,152,.95), rgba(211,16,39,.92));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 30px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 18px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff}
+    .brand-logo{width:42px; height:42px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.4)}
+    .brand-logo span{font-family:"Russo One", sans-serif; font-size:22px; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.7)}
+    .brand-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:20px}
+    .nav a.link{color:#fff; text-decoration:none; margin:0 10px; opacity:.9}
+    .nav a.link:hover{opacity:1}
+    .nav-cta{padding:8px 14px; border-radius:999px; background:linear-gradient(135deg, var(--gold), #ff7b00); color:#161616; font-weight:700; box-shadow:0 6px 16px rgba(255,204,0,.35)}
+
+    section{max-width:1200px; margin:0 auto; padding:52px 20px}
+    .section-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:26px; margin-bottom:18px}
+    .section-sub{color:var(--muted); margin:8px 0 22px}
+
+    .article-content{line-height:1.7}
+    .article-content h3{color:var(--gold); margin:30px 0 16px; font-size:20px}
+    .article-content h4{color:var(--muted); margin:24px 0 12px; font-size:18px}
+    .article-content p{margin:16px 0}
+    .article-content ul, .article-content ol{margin:16px 0; padding-left:24px}
+    .article-content li{margin:8px 0}
+    .article-content code{background:rgba(255,255,255,.1); padding:2px 6px; border-radius:4px; font-family:monospace}
+    .article-content pre{background:var(--panel); padding:16px; border-radius:8px; overflow-x:auto; margin:20px 0}
+    .article-content pre code{background:none; padding:0}
+
+    .info-box{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:20px; margin:24px 0; box-shadow:var(--shadow)}
+    .info-box h4{margin:0 0 12px; color:var(--gold)}
+    .warning{background:rgba(211,16,39,.15); border:1px solid rgba(211,16,39,.3); border-left:4px solid var(--accent)}
+    .tip{background:rgba(255,204,0,.15); border:1px solid rgba(255,204,0,.3); border-left:4px solid var(--gold)}
+
+    .btn{padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); color:#fff; text-decoration:none; font-weight:700; display:inline-block; margin-top:30px}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--primary-2) 60%, var(--accent)); border-color:rgba(255,255,255,.18)}
+
+    footer{background:#0a0e18; border-top:1px solid rgba(255,255,255,.08); padding:22px 20px; color:var(--muted); text-align:center}
+    footer .copy{color:#bcd0ff}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="skills.html">Superpowers</a>
+        <a class="link" href="projects.html">Missions</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="gallery.html">Gallery</a>
+        <a class="link nav-cta" href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section>
+    <h2 class="section-title">Episode 1: The Kafka Awakens</h2>
+    <p class="section-sub">Mastering Apache Kafka fundamentals: Architecture, topics, partitions, and making brokers happy when the firehose starts.</p>
+
+    <div class="article-content">
+      <h3>What is Apache Kafka?</h3>
+      <p>Apache Kafka is a distributed streaming platform that enables you to build real-time data pipelines and streaming applications. It's designed to handle high volumes of data with low latency, making it perfect for modern data-intensive applications.</p>
+
+      <div class="info-box">
+        <h4>Key Kafka Concepts</h4>
+        <ul>
+          <li><strong>Topic:</strong> A category or feed name to which messages are published</li>
+          <li><strong>Partition:</strong> Topics are split into partitions for parallelism</li>
+          <li><strong>Producer:</strong> Applications that publish messages to topics</li>
+          <li><strong>Consumer:</strong> Applications that subscribe to topics and process messages</li>
+          <li><strong>Broker:</strong> Kafka server that stores data and serves clients</li>
+          <li><strong>Cluster:</strong> Multiple brokers working together</li>
+        </ul>
+      </div>
+
+      <h3>Kafka Architecture Deep Dive</h3>
+      <p>Kafka's architecture is built for scalability and fault tolerance. Here's how it works:</p>
+
+      <h4>Topics and Partitions</h4>
+      <p>Topics are divided into partitions, which are ordered, immutable sequences of messages. Each partition is replicated across multiple brokers for fault tolerance.</p>
+
+      <pre><code># Example topic creation with partitions
+kafka-topics.sh --create \
+  --topic orders \
+  --partitions 6 \
+  --replication-factor 3 \
+  --bootstrap-server localhost:9092</code></pre>
+
+      <div class="info-box tip">
+        <h4>Best Practice: Partitioning Strategy</h4>
+        <p>Choose the number of partitions based on:
+        <ul>
+          <li>Expected throughput (more partitions = more parallelism)</li>
+          <li>Consumer processing time</li>
+          <li>Cluster size and resources</li>
+          <li>Start with 6-12 partitions and scale as needed</li>
+        </ul>
+        </p>
+      </div>
+
+      <h3>Producers: Publishing Messages</h3>
+      <p>Producers are responsible for publishing messages to Kafka topics. Key configuration options:</p>
+
+      <pre><code># Producer configuration example
+Properties props = new Properties();
+props.put("bootstrap.servers", "localhost:9092");
+props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+props.put("acks", "all"); // Ensure message durability
+props.put("retries", 3); // Retry on failure
+props.put("compression.type", "snappy"); // Reduce network traffic</code></pre>
+
+      <h4>Message Keys and Partitioning</h4>
+      <p>Messages can have keys that determine which partition they go to. Same key = same partition (ordering guarantee).</p>
+
+      <div class="info-box warning">
+        <h4>Warning: Message Size Limits</h4>
+        <p>Kafka has default message size limits (1MB). For larger messages:
+        <ul>
+          <li>Configure <code>message.max.bytes</code> on brokers</li>
+          <li>Set <code>max.request.size</code> on producers</li>
+          <li>Consider compression for large payloads</li>
+          <li>Alternatively, store large data in external storage and send references</li>
+        </ul>
+        </p>
+      </div>
+
+      <h3>Consumers: Reading Messages</h3>
+      <p>Consumers read messages from topics and process them. They work in consumer groups for parallel processing.</p>
+
+      <pre><code># Consumer configuration example
+Properties props = new Properties();
+props.put("bootstrap.servers", "localhost:9092");
+props.put("group.id", "order-processors");
+props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+props.put("auto.offset.reset", "earliest"); // Start from beginning if no offset
+props.put("enable.auto.commit", "false"); // Manual offset commit for exactly-once</code></pre>
+
+      <h4>Consumer Groups and Rebalancing</h4>
+      <p>Consumer groups allow parallel processing of topics. Each partition is consumed by exactly one consumer in the group.</p>
+
+      <h3>Exactly-Once Semantics</h3>
+      <p>Kafka supports exactly-once processing through transactional producers and consumer offset management:</p>
+
+      <pre><code># Enable exactly-once semantics
+props.put("enable.idempotence", "true");
+props.put("transactional.id", "unique-producer-id");
+
+// In producer code
+producer.initTransactions();
+try {
+    producer.beginTransaction();
+    producer.send(record1);
+    producer.send(record2);
+    producer.commitTransaction();
+} catch (Exception e) {
+    producer.abortTransaction();
+}</code></pre>
+
+      <h3>Performance Optimization</h3>
+      <p>Optimize Kafka for high throughput and low latency:</p>
+
+      <ul>
+        <li><strong>Batch Size:</strong> Larger batches improve throughput but increase latency</li>
+        <li><strong>Linger.ms:</strong> Wait time for batching messages</li>
+        <li><strong>Compression:</strong> Use snappy or lz4 for better network utilization</li>
+        <li><strong>Acks:</strong> Trade-off between durability and performance</li>
+        <li><strong>Replication:</strong> Ensure adequate replication factor for durability</li>
+      </ul>
+
+      <div class="info-box">
+        <h4>Monitoring and Observability</h4>
+        <p>Essential metrics to monitor:
+        <ul>
+          <li>Producer/Consumer throughput and latency</li>
+          <li>Broker CPU, memory, and disk usage</li>
+          <li>Consumer lag (messages behind)</li>
+          <li>Network throughput</li>
+          <li>Topic partition sizes and growth rates</li>
+        </ul>
+        </p>
+      </div>
+
+      <h3>Common Pitfalls and Solutions</h3>
+      <p>Avoid these common Kafka mistakes:</p>
+
+      <ul>
+        <li><strong>Too many partitions:</strong> Can cause overhead and rebalancing issues</li>
+        <li><strong>Improper key selection:</strong> Leads to data skew and hot partitions</li>
+        <li><strong>Ignoring consumer lag:</strong> Can cause data processing delays</li>
+        <li><strong>Insufficient replication:</strong> Risk of data loss during broker failures</li>
+        <li><strong>Poor retention policies:</strong> Either too short (data loss) or too long (storage costs)</li>
+      </ul>
+    </div>
+
+    <a href="blog.html" class="btn primary">← Back to Blog</a>
+    <a href="flink-backpressure.html" class="btn" style="margin-left:12px">Next: Flink Backpressure →</a>
+  </section>
+
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">"With great data comes great responsibility."</div>
+  </footer>
+</body>
+</html>

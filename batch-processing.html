@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Batch Processing - Superman of Data Pipelines</title>
+  <meta name="description" content="Learn about batch processing techniques and frameworks for data engineering." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0b0f1a;           /* deep night */
+      --panel: #0f1629;        /* dark indigo */
+      --panel-2: #111936;      /* slightly brighter */
+      --text: #e6ecff;         /* soft white */
+      --muted: #9fb0d6;        /* slate */
+      --primary: #1e3c72;      /* superman blue */
+      --primary-2: #2a5298;    /* gradient stop */
+      --accent: #d31027;       /* superman red */
+      --gold: #ffcc00;         /* superman gold */
+      --ok: #27d3a2;
+      --shadow: 0 20px 50px rgba(0,0,0,.45);
+      --radius: 20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255,0,72,.18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0,126,255,.15), transparent 55%),
+                  var(--bg);
+      scroll-behavior:smooth;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg, rgba(30,60,114,.95), rgba(42,82,152,.95), rgba(211,16,39,.92));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 30px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 18px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff}
+    .brand-logo{width:42px; height:42px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.4)}
+    .brand-logo span{font-family:"Russo One", sans-serif; font-size:22px; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.7)}
+    .brand-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:20px}
+    .nav a.link{color:#fff; text-decoration:none; margin:0 10px; opacity:.9}
+    .nav a.link:hover{opacity:1}
+    .nav-cta{padding:8px 14px; border-radius:999px; background:linear-gradient(135deg, var(--gold), #ff7b00); color:#161616; font-weight:700; box-shadow:0 6px 16px rgba(255,204,0,.35)}
+
+    section{max-width:1200px; margin:0 auto; padding:52px 20px}
+    @media (max-width: 600px) {
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+    }
+    @media (max-width: 600px) {
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+    }
+    @media (max-width: 600px) {
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+    }
+    @media (max-width: 600px) {
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+    }
+    .section-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:26px; margin-bottom:18px}
+    .section-sub{color:var(--muted); margin:8px 0 22px}
+
+    footer{background:#0a0e18; border-top:1px solid rgba(255,255,255,.08); padding:22px 20px; color:var(--muted); text-align:center}
+    footer .copy{color:#0a0e18}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="skills.html">Superpowers</a>
+        <a class="link" href="projects.html">Missions</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="gallery.html">Gallery</a>
+        <a class="link nav-cta" href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section>
+    <h2 class="section-title">Batch Processing Techniques</h2>
+    <p class="section-sub">Understanding batch processing in data engineering and its applications.</p>
+    <p>Batch processing is a method of processing data in large volumes at once, rather than in real-time. This approach is often used for tasks that do not require immediate results.</p>
+    
+    <h3>Key Concepts</h3>
+    <ul>
+      <li><strong>Batch Jobs:</strong> Scheduled jobs that process data in bulk.</li>
+      <li><strong>Data Lakes:</strong> Centralized repositories for storing large amounts of raw data.</li>
+      <li><strong>ETL Processes:</strong> Extract, Transform, Load processes for data integration.</li>
+    </ul>
+
+    <h3>Implementation Steps</h3>
+    <ol>
+      <li>Define the batch processing requirements and data sources.</li>
+      <li>Choose a suitable framework (e.g., Apache Spark, Apache Hadoop).</li>
+      <li>Implement data transformation and loading logic.</li>
+      <li>Schedule and monitor batch jobs for performance.</li>
+    </ol>
+
+    <a href="index.html" class="btn primary">← Back to Home</a>
+  </section>
+
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">"With great data comes great responsibility."</div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact - Superman of Data Pipelines</title>
+  <meta name="description" content="Get in touch with Kalaiyarasan for data pipeline engineering consulting, Flink/Kafka expertise, and real-time streaming solutions." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a;           --panel:#0f1629;        --panel-2:#111936;      
+      --text:#e6ecff;         --muted:#9fb0d6;        --primary:#1e3c72;      
+      --primary-2:#2a5298;    --accent:#d31027;       --gold:#ffcc00;         
+      --ok:#27d3a2;           --shadow:0 20px 50px rgba(0,0,0,.45);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255,0,72,.18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0,126,255,.15), transparent 55%),
+                  var(--bg);
+      scroll-behavior:smooth;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg, rgba(30,60,114,.95), rgba(42,82,152,.95), rgba(211,16,39,.92));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 30px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 18px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff}
+    .brand-logo{width:42px; height:42px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.4)}
+    .brand-logo span{font-family:"Russo One", sans-serif; font-size:22px; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.7)}
+    .brand-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:20px}
+    .nav a.link{color:#fff; text-decoration:none; margin:0 10px; opacity:.9}
+    .nav a.link:hover{opacity:1}
+    .nav-cta{padding:8px 14px; border-radius:999px; background:linear-gradient(135deg, var(--gold), #ff7b00); color:#161616; font-weight:700; box-shadow:0 6px 16px rgba(255,204,0,.35)}
+
+    section{max-width:1200px; margin:0 auto; padding:52px 20px}
+    .section-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:26px; margin-bottom:18px}
+    .section-sub{color:var(--muted); margin:8px 0 22px}
+
+    .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:30px}
+    @media (max-width: 800px){ .contact-grid{grid-template-columns:1fr} }
+    .contact-card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow)}
+    .contact-card h3{color:var(--gold); margin:0 0 16px; font-size:20px}
+    .contact-info{margin:0; padding:0; list-style:none}
+    .contact-info li{margin:12px 0; display:flex; align-items:center; gap:12px}
+    .contact-info a{color:#7bc6ff; text-decoration:none; transition:color 0.2s ease}
+    .contact-info a:hover{color:var(--gold)}
+    .icon{width:20px; height:20px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold}
+
+    .services-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-top:30px}
+    @media (max-width: 600px) {
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .contact-grid { gap: 20px; }
+      .contact-card { padding: 20px; }
+      .services-grid { gap: 12px; }
+      .service-item { padding: 16px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+    }
+    .service-item{background:var(--panel-2); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:20px}
+    .service-item h4{margin:0 0 8px; color:var(--gold)}
+    .service-item p{margin:0; font-size:14px; line-height:1.5}
+
+    .btn{padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); color:#fff; text-decoration:none; font-weight:700; display:inline-block; margin-top:30px}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--primary-2) 60%, var(--accent)); border-color:rgba(255,255,255,.18)}
+
+    footer{background:#0a0e18; border-top:1px solid rgba(255,255,255,.08); padding:22px 20px; color:var(--muted); text-align:center}
+    footer .copy{color:#bcd0ff}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="skills.html">Superpowers</a>
+        <a class="link" href="projects.html">Missions</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="gallery.html">Gallery</a>
+        <a class="link nav-cta" href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section>
+    <h2 class="section-title">Signal the Hero</h2>
+    <p class="section-sub">Ready to discuss your data pipeline challenges? Let's build something amazing together.</p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Get in Touch</h3>
+        <ul class="contact-info">
+          <li>
+            <span class="icon">E</span>
+            <a href="mailto:arasankalai512@gmail.com">arasankalai512@gmail.com</a>
+          </li>
+          <li>
+            <span class="icon">P</span>
+            <a href="tel:+919344103175">(+91) 9344103175</a>
+          </li>
+          <li>
+            <span class="icon">G</span>
+            <a href="https://github.com/supermankalai" target="_blank" rel="noreferrer noopener">github.com/supermankalai</a>
+          </li>
+          <li>
+            <span class="icon">L</span>
+            <a href="https://linkedin.com/in/supermankalai" target="_blank" rel="noreferrer noopener">linkedin.com/in/supermankalai</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact-card">
+        <h3>Availability & Rates</h3>
+        <p>Currently available for consulting and freelance projects. I specialize in:</p>
+        <ul style="margin:16px 0; padding-left:20px; line-height:1.6">
+          <li>Real-time data pipeline architecture</li>
+          <li>Apache Flink performance optimization</li>
+          <li>Kafka cluster design and scaling</li>
+          <li>CDC implementation with Debezium</li>
+          <li>Observability and monitoring solutions</li>
+        </ul>
+        <p><strong>Response Time:</strong> Typically within 24 hours</p>
+        <p><strong>Engagement:</strong> Project-based or hourly consulting</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:40px; color:var(--gold)">Services Offered</h3>
+    <div class="services-grid">
+      <div class="service-item">
+        <h4>Pipeline Architecture</h4>
+        <p>Design end-to-end data pipelines from ingestion to analytics with proper error handling and scalability.</p>
+      </div>
+      <div class="service-item">
+        <h4>Flink Optimization</h4>
+        <p>Performance tuning, checkpoint optimization, state management, and backpressure handling for Flink jobs.</p>
+      </div>
+      <div class="service-item">
+        <h4>Kafka Engineering</h4>
+        <p>Topic design, partitioning strategies, consumer group optimization, and cluster capacity planning.</p>
+      </div>
+      <div class="service-item">
+        <h4>CDC Implementation</h4>
+        <p>Real-time database replication using Debezium with schema evolution and DDL change handling.</p>
+      </div>
+      <div class="service-item">
+        <h4>Observability Setup</h4>
+        <p>Comprehensive monitoring with Prometheus, Grafana dashboards, and alerting for data pipelines.</p>
+      </div>
+      <div class="service-item">
+        <h4>Training & Mentoring</h4>
+        <p>Team training on streaming technologies, best practices, and production deployment strategies.</p>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn primary">← Back to Home</a>
+  </section>
+
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">"With great data comes great responsibility."</div>
+  </footer>
+</body>
+</html>

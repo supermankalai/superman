@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>supermankalai — Superman of Data Pipelines ⚡</title>
+  <meta name="description" content="Kalaiyarasan — Big Data Engineer. Flink, Kafka, Postgres. Portfolio + Blog with a fun Superman theme." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a;           /* deep night */
+      --panel:#0f1629;        /* dark indigo */
+      --panel-2:#111936;      /* slightly brighter */
+      --text:#e6ecff;         /* soft white */
+      --muted:#9fb0d6;        /* slate */
+      --primary:#1e3c72;      /* superman blue */
+      --primary-2:#2a5298;    /* gradient stop */
+      --accent:#d31027;       /* superman red */
+      --gold:#ffcc00;         /* superman gold */
+      --ok:#27d3a2;
+      --shadow:0 20px 50px rgba(0,0,0,.45);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255,0,72,.18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0,126,255,.15), transparent 55%),
+                  var(--bg);
+      scroll-behavior:smooth;
+    }
+
+    /* ===== NAV ===== */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg, rgba(30,60,114,.95), rgba(42,82,152,.95), rgba(211,16,39,.92));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 30px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 18px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff}
+    .brand-logo{width:42px; height:42px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.4)}
+    .brand-logo span{font-family:"Russo One", sans-serif; font-size:22px; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.7)}
+    .brand-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:20px}
+    .nav a.link{color:#fff; text-decoration:none; margin:0 10px; opacity:.9}
+    .nav a.link:hover{opacity:1}
+    .nav-cta{padding:8px 14px; border-radius:999px; background:linear-gradient(135deg, var(--gold), #ff7b00); color:#161616; font-weight:700; box-shadow:0 6px 16px rgba(255,204,0,.35)}
+
+    /* ===== HERO ===== */
+    .hero{position:relative; overflow:hidden}
+    .hero-wrap{max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1.15fr .85fr; gap:28px; padding:60px 20px}
+    @media (max-width: 940px){ .hero-wrap{grid-template-columns:1fr} }
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); padding:34px; box-shadow:var(--shadow)}
+    .supertitle{display:inline-block; font-family:"Russo One", sans-serif; font-size:35px; line-height:1.1; letter-spacing:.5px;
+      background:linear-gradient(90deg, var(--gold), #ff7b00); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      filter: drop-shadow(0 6px 20px rgba(255,180,0,.25));
+    }
+    .subtitle{font-size:18px; color:var(--muted); margin-top:10px}
+    .badges{display:flex; flex-wrap:wrap; gap:10px; margin:20px 0}
+    .badge{border:1px solid rgba(255,255,255,.10); background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); padding:8px 12px; border-radius:999px; font-weight:600}
+    .cta-row{display:flex; gap:12px; margin-top:12px; flex-wrap:wrap}
+    .btn{padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); color:#fff; text-decoration:none; font-weight:700}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--primary-2) 60%, var(--accent)); border-color:rgba(255,255,255,.18)}
+
+    .stat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px}
+    .stat{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:16px; text-align:center}
+    .stat .n{font-size:28px; font-weight:800}
+    .stat .l{font-size:12px; color:var(--muted)}
+
+    .hero-visual{position:relative; min-height:320px}
+    .orb{position:absolute; inset:auto 0 0 0; height:100%; display:grid; place-items:center}
+    .shield {
+  width: 88%;
+  aspect-ratio: 1/1;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255, 208, 0, .25), rgba(211, 16, 39, .20) 50%, rgba(30,60,114,.35) 80%),
+    url("images/superman.jpg") top/cover no-repeat;
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 30px 120px rgba(211,16,39,.35), inset 0 20px 60px rgba(0,0,0,.25);
+  transform: rotate(-6deg);
+  animation: float 6s ease-in-out infinite;
+}
+
+    @keyframes float { 0%,100%{ transform:rotate(-6deg) translateY(0)} 50%{ transform:rotate(-4deg) translateY(-10px)} }
+
+    /* ===== SECTIONS ===== */
+    section{max-width:1200px; margin:0 auto; padding:52px 20px}
+    .section-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:26px; margin-bottom:18px}
+    .section-sub{color:var(--muted); margin:8px 0 22px}
+
+    /* Responsive Enhancements */
+    @media (max-width: 600px) {
+      .supertitle { font-size: 28px; }
+      .subtitle { font-size: 16px; }
+      .section-title { font-size: 22px; }
+      .section-sub { font-size: 14px; }
+      .btn { padding: 10px 14px; font-size: 14px; }
+      .nav-inner { flex-direction: column; gap: 10px; }
+      .nav a.link { margin: 5px 0; display: block; text-align: center; }
+      .nav-cta { margin-top: 10px; }
+      .hero-wrap { padding: 40px 15px; }
+      .hero-card { padding: 24px; }
+      .stat-grid { grid-template-columns: 1fr; gap: 10px; }
+      .stat .n { font-size: 24px; }
+      section { padding: 40px 15px; }
+      .grid, .skills, .blog, .gallery { gap: 12px; }
+      .card img { height: 140px; }
+      .contact .box { padding: 16px; }
+      .badges { justify-content: center; }
+      .cta-row { justify-content: center; }
+    }
+
+    /* Superpowers */
+    .skills{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px}
+    .skill{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px; box-shadow:var(--shadow)}
+    .skill h4{margin:0 0 6px}
+    .skill small{color:var(--muted)}
+
+    /* Missions (Projects) */
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column}
+    .card img{width:100%; height:160px; object-fit:cover}
+    .card .pad{padding:16px}
+    .tag{display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(39,211,162,.15); border:1px solid rgba(39,211,162,.35); color:#c9ffee; font-weight:700; font-size:12px}
+
+    /* Blog */
+    .blog{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px}
+    .post{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px}
+    .post h4{margin:0 0 8px}
+    .post .meta{color:var(--muted); font-size:12px}
+
+    /* Gallery */
+    .gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px}
+    .gallery img{width:100%; border-radius:14px; aspect-ratio:16/9; object-fit:cover; transition:transform .35s ease, box-shadow .35s ease}
+    .gallery img:hover{transform:scale(1.04); box-shadow:0 14px 40px rgba(255,255,255,.15)}
+
+    /* Contact */
+    .contact{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+    @media (max-width: 800px){ .contact{grid-template-columns:1fr} }
+    .contact .box{background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px}
+    .contact a{color:#7bc6ff; text-decoration:none}
+
+    /* Footer */
+    footer{background:#0a0e18; border-top:1px solid rgba(255,255,255,.08); padding:22px 20px; color:var(--muted); text-align:center}
+    footer .copy{color:#bcd0ff}
+
+    /* Utilities */
+    .row{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
+    .spacer{height:28px}
+  </style>
+</head>
+<body>
+  <!-- ===== NAV ===== -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="#top">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="#about">About</a>
+        <a class="link" href="#skills">Superpowers</a>
+        <a class="link" href="#projects">Missions</a>
+        <a class="link" href="#blog">Blog</a>
+        <a class="link" href="#gallery">Gallery</a>
+        <a class="link nav-cta" href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header id="top" class="hero">
+    <section class="hero-wrap">
+      <div class="hero-card">
+        <div class="supertitle">Superman of Data Pipelines ⚡</div>
+        <p class="subtitle">I’m Kalaiyarasan — a Big Data Engineer crafting real‑time systems with Apache Flink, Kafka, and Postgres. Faster than a speeding packet, more powerful than a batch job.</p>
+        <div class="badges">
+          <span class="badge">Flink • Kafka • Postgres</span>
+          <span class="badge">Camel • Spark • Redis</span>
+          <span class="badge">ClickHouse • Doris</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn primary" href="#projects">View Missions</a>
+          <a class="btn" href="#blog">Read the Journal</a>
+        </div>
+        <div class="stat-grid">
+          <div class="stat"><div class="n">10k+/s</div><div class="l">Kafka ingest</div></div>
+          <div class="stat"><div class="n">ms-latency</div><div class="l">stream joins</div></div>
+          <div class="stat"><div class="n">24×7</div><div class="l">reliable ops</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="orb"><div class="shield" aria-hidden="true"></div></div>
+      </div>
+    </section>
+  </header>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about">
+    <h2 class="section-title">Origin Story</h2>
+    <p class="section-sub">By day, I’m Kalai — building resilient, observable data platforms. By night, I save products from data chaos with streaming architectures, CDC, and low‑latency storage.</p>
+    <div class="grid">
+      <div class="card"><img src="images/leadspace_article.jpg" alt="Console and code" /><div class="pad"><span class="tag">Mission</span><h3>From MQTT to Mobile</h3><p>End‑to‑end pipeline: MQTT → Kafka → Flink → DB → push notifications.</p></div></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop" alt="Laptop coding" /><div class="pad"><span class="tag">Focus</span><h3>Exactly‑once State</h3><p>RocksDB state backends, checkpoint tuning, idempotent sinks.</p></div></div>
+      <div class="card"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop" alt="Data center" /><div class="pad"><span class="tag">Tooling</span><h3>Observability</h3><p>Lag metrics, backpressure analysis, and alerting that matters.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section id="skills">
+    <h2 class="section-title">Superpowers</h2>
+    <p class="section-sub">Technologies I use to keep the data universe safe.</p>
+    <div class="skills">
+      <div class="skill"><h4>Apache Flink</h4><small>Event‑time windows • Stateful ops • CEP</small></div>
+      <div class="skill"><h4>Apache Kafka</h4><small>High‑throughput ingest • Exactly‑once semantics</small></div>
+      <div class="skill"><h4>Storage</h4><small>Postgres • ClickHouse • Doris • RocksDB</small></div>
+      <div class="skill"><h4>Integration</h4><small>Apache Camel • MQTT • CDC</small></div>
+      <div class="skill"><h4>Batch & Orchestration</h4><small>Spark • Airflow • Debezium</small></div>
+      <div class="skill"><h4>Ops</h4><small>Checkpointing • Backpressure • SLOs</small></div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects">
+    <h2 class="section-title">Recent Missions</h2>
+    <p class="section-sub">A few highlights from the field.</p>
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1400&auto=format&fit=crop" alt="Streaming" />
+        <div class="pad">
+          <span class="tag">Flink</span>
+          <h3>Real‑time Sessions Builder</h3>
+          <p>Built a sessions gap‑filler that infers missing shifts from timelines and emits accurate end times.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1488229297570-58520851e868?q=80&w=1400&auto=format&fit=crop" alt="Pipelines" />
+        <div class="pad">
+          <span class="tag">Kafka</span>
+          <h3>100k events per machine</h3>
+          <p>Handled bursty MQTT → Kafka loads with correct keys, partitions, and backpressure‑aware consumers.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1400&auto=format&fit=crop" alt="Databases" />
+        <div class="pad">
+          <span class="tag">ClickHouse</span>
+          <h3>CDC to Columnar</h3>
+          <p>Moved hot analytics to ClickHouse/Doris with Debezium & Flink for ultra‑fast dashboards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BLOG ===== -->
+  <section id="blog">
+    <h2 class="section-title">Journal of Adventures</h2>
+    <p class="section-sub">Stories, fixes, and playbooks from the data frontlines.</p>
+    <div id="blogList" class="blog"></div>
+  </section>
+
+  <!-- ===== GALLERY ===== -->
+  <section id="gallery">
+    <h2 class="section-title">Fortress of Solitude</h2>
+    <p class="section-sub">A quick look at concepts and inspiration. Hover to zoom.</p>
+    <div class="gallery">
+      <!-- 4K‑ish placeholders; replace with your own images later -->
+      <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=2000&auto=format&fit=crop" alt="Abstract tech" />
+      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2000&auto=format&fit=crop" alt="Team and boards" />
+      <img src="https://images.unsplash.com/photo-1510511233900-1982d92bd835?q=80&w=2000&auto=format&fit=crop" alt="City at night" />
+      <img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=2000&auto=format&fit=crop" alt="Cables and light" />
+      <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=2000&auto=format&fit=crop" alt="Server room" />
+      <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop" alt="Code desk" />
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <h2 class="section-title">Signal the Hero</h2>
+    <p class="section-sub">For collaborations, projects, or a friendly hello.</p>
+    <div class="contact">
+      <div class="box">
+        <h3>Reach out</h3>
+        <p>Email: <a href="mailto:arasankalai512@gmail.com">arasankalai512@gmail.com</a></p>
+        <p>Phone: <a href="tel:+919344103175">(+91) 9344103175</a></p>
+        <p>GitHub: <a href="https://github.com/" target="_blank" rel="noreferrer noopener">github.com/yourhandle</a></p>
+        <p>LinkedIn: <a href="https://linkedin.com/in/" target="_blank" rel="noreferrer noopener">linkedin.com/in/yourhandle</a></p>
+      </div>
+      <div class="box">
+        <h3>Availability</h3>
+        <p>Open to freelance and consulting for data engineering and streaming architectures.</p>
+        <ul>
+          <li>Green‑field pipeline design</li>
+          <li>Flink performance & checkpoint tuning</li>
+          <li>Kafka ops, partitioning & capacity planning</li>
+          <li>CDC to OLAP stores (ClickHouse/Doris)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">“With great data comes great responsibility.”</div>
+  </footer>
+
+  <script>
+    // Simple in‑page blog data. Edit here to add posts.
+    const posts = [
+      {
+        title: 'Episode 1: The Kafka Awakens',
+        date: '2025-08-01',
+        minutes: 5,
+        excerpt: 'Keys, partitions, and making brokers happy when the firehose starts.',
+        tags: ['Kafka','Throughput'],
+        page: 'kafka-basics.html'
+      },
+      {
+        title: 'Episode 2: Battle with Backpressure',
+        date: '2025-08-09',
+        minutes: 6,
+        excerpt: 'How I tuned Flink checkpoints, buffers, and parallelism to keep the stream flowing.',
+        tags: ['Flink','Ops'],
+        page: 'flink-backpressure.html'
+      },
+      {
+        title: 'Episode 3: Flink Joins the League',
+        date: '2025-08-19',
+        minutes: 7,
+        excerpt: 'CEP, timers, and state — building a sessions gap‑filler with accurate shift ends.',
+        tags: ['Flink','CEP'],
+        page: 'flink-cep.html'
+      }
+    ];
+
+    const blogList = document.getElementById('blogList');
+    blogList.innerHTML = posts.map(p => `
+      <article class="post" onclick="window.location.href='${p.page}'" style="cursor: pointer;">
+        <h4>${p.title}</h4>
+        <div class="meta">${new Date(p.date).toLocaleDateString(undefined, {year:'numeric', month:'short', day:'2-digit'})} • ${p.minutes} min read</div>
+        <p>${p.excerpt}</p>
+        <div class="row">${p.tags.map(t => `<span class="badge">${t}</span>`).join('')}</div>
+      </article>
+    `).join('');
+
+    // Add click events to all interactive elements
+    document.addEventListener('DOMContentLoaded', function() {
+      // Navigation links
+      const navLinks = document.querySelectorAll('.nav a.link');
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetPage = href.substring(1) + '.html';
+            window.location.href = targetPage;
+          });
+        }
+      });
+
+      // CTA buttons
+      const ctaButtons = document.querySelectorAll('.btn');
+      ctaButtons.forEach(button => {
+        const href = button.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetPage = href.substring(1) + '.html';
+            window.location.href = targetPage;
+          });
+        }
+      });
+
+      // Project cards
+      const projectCards = document.querySelectorAll('#projects .card');
+      projectCards.forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+          const pages = ['flink-sessions.html', 'kafka-ingest.html', 'cdc-pipeline.html'];
+          window.location.href = pages[index];
+        });
+      });
+
+      // Skill cards
+      const skillCards = document.querySelectorAll('.skill');
+      skillCards.forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+          const pages = ['flink-deepdive.html', 'kafka-advanced.html', 'data-storage.html', 'camel-integration.html', 'batch-processing.html', 'streaming-ops.html'];
+          window.location.href = pages[index];
+        });
+      });
+
+      // About cards
+      const aboutCards = document.querySelectorAll('#about .card');
+      aboutCards.forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+          const pages = ['mqtt-pipeline.html', 'flink-state.html', 'data-observability.html'];
+          window.location.href = pages[index];
+        });
+      });
+
+      // Gallery images
+      const galleryImages = document.querySelectorAll('.gallery img');
+      galleryImages.forEach((img, index) => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() {
+          window.location.href = 'gallery-details.html';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

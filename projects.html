@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects - Superman of Data Pipelines</title>
+  <meta name="description" content="Explore real-world data pipeline projects by Kalaiyarasan using Flink, Kafka, and modern data engineering technologies." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b0f1a;           --panel:#0f1629;        --panel-2:#111936;      
+      --text:#e6ecff;         --muted:#9fb0d6;        --primary:#1e3c72;      
+      --primary-2:#2a5298;    --accent:#d31027;       --gold:#ffcc00;         
+      --ok:#27d3a2;           --shadow:0 20px 50px rgba(0,0,0,.45);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background: radial-gradient(1000px 600px at 80% -10%, rgba(255,0,72,.18), transparent 60%),
+                  radial-gradient(700px 400px at -20% 10%, rgba(0,126,255,.15), transparent 55%),
+                  var(--bg);
+      scroll-behavior:smooth;
+    }
+
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg, rgba(30,60,114,.95), rgba(42,82,152,.95), rgba(211,16,39,.92));
+      border-bottom:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 30px rgba(0,0,0,.25);
+      backdrop-filter: blur(6px);
+    }
+    .nav-inner{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 18px}
+    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff}
+    .brand-logo{width:42px; height:42px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #ffd84d, #ff6a00 70%); display:grid; place-items:center; box-shadow:0 6px 18px rgba(0,0,0,.4)}
+    .brand-logo span{font-family:"Russo One", sans-serif; font-size:22px; color:#111; text-shadow:0 1px 0 rgba(255,255,255,.7)}
+    .brand-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:20px}
+    .nav a.link{color:#fff; text-decoration:none; margin:0 10px; opacity:.9}
+    .nav a.link:hover{opacity:1}
+    .nav-cta{padding:8px 14px; border-radius:999px; background:linear-gradient(135deg, var(--gold), #ff7b00); color:#161616; font-weight:700; box-shadow:0 6px 16px rgba(255,204,0,.35)}
+
+    section{max-width:1200px; margin:0 auto; padding:52px 20px}
+    .section-title{font-family:"Russo One", sans-serif; letter-spacing:.5px; font-size:26px; margin-bottom:18px}
+    .section-sub{color:var(--muted); margin:8px 0 22px}
+
+    .projects-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:24px; margin-top:30px}
+    .project-card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease}
+    .project-card:hover{transform:translateY(-4px); box-shadow:0 25px 60px rgba(0,0,0,.5); border-color:rgba(255,255,255,.15)}
+    .project-card img{width:100%; height:200px; object-fit:cover}
+    .project-content{padding:24px}
+    .project-tag{display:inline-block; padding:6px 12px; border-radius:999px; background:rgba(39,211,162,.15); border:1px solid rgba(39,211,162,.35); color:#c9ffee; font-weight:700; font-size:12px; margin-bottom:12px}
+    .project-card h3{margin:0 0 12px; font-size:20px}
+    .project-card p{margin:0 0 16px; line-height:1.6}
+    .project-stats{display:flex; gap:16px; margin-top:16px}
+    .stat-item{display:flex; align-items:center; gap:6px; font-size:14px; color:var(--muted)}
+    .stat-item::before{content:""; width:8px; height:8px; background:var(--ok); border-radius:50%}
+
+    .btn{padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); color:#fff; text-decoration:none; font-weight:700; display:inline-block; margin-top:30px}
+    .btn.primary{background:linear-gradient(135deg, var(--primary), var(--primary-2) 60%, var(--accent)); border-color:rgba(255,255,255,.18)}
+
+    footer{background:#0a0e18; border-top:1px solid rgba(255,255,255,.08); padding:22px 20px; color:var(--muted); text-align:center}
+    footer .copy{color:#bcd0ff}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><span>S</span></div>
+        <div class="brand-title">supermankalai</div>
+      </a>
+      <div>
+        <a class="link" href="about.html">About</a>
+        <a class="link" href="skills.html">Superpowers</a>
+        <a class="link" href="projects.html">Missions</a>
+        <a class="link" href="blog.html">Blog</a>
+        <a class="link" href="gallery.html">Gallery</a>
+        <a class="link nav-cta" href="contact.html">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <section>
+    <h2 class="section-title">Mission Log: Data Pipeline Projects</h2>
+    <p class="section-sub">Real-world implementations that demonstrate the power of modern data engineering</p>
+
+    <div class="projects-grid">
+      <div class="project-card" onclick="window.location.href='flink-sessions.html'">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1400&auto=format&fit=crop" alt="Real-time Sessions Builder">
+        <div class="project-content">
+          <span class="project-tag">Apache Flink</span>
+          <h3>Real-time Sessions Builder</h3>
+          <p>Built a sophisticated session gap-filler that processes user activity streams to infer missing shift data and emit accurate session end times with millisecond precision.</p>
+          <div class="project-stats">
+            <div class="stat-item">10M+ events/day</div>
+            <div class="stat-item">50ms latency</div>
+            <div class="stat-item">99.9% uptime</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.location.href='kafka-ingest.html'">
+        <img src="https://images.unsplash.com/photo-1488229297570-58520851e868?q=80&w=1400&auto=format&fit=crop" alt="Kafka Ingest Pipeline">
+        <div class="project-content">
+          <span class="project-tag">Apache Kafka</span>
+          <h3>100k Events per Machine</h3>
+          <p>Designed and implemented a high-throughput MQTT to Kafka ingestion pipeline capable of handling bursty loads with proper key partitioning and backpressure-aware consumers.</p>
+          <div class="project-stats">
+            <div class="stat-item">100k/sec throughput</div>
+            <div class="stat-item">Zero data loss</div>
+            <div class="stat-item">Auto-scaling</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.location.href='cdc-pipeline.html'">
+        <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?q=80&w=1400&auto=format&fit=crop" alt="CDC Pipeline">
+        <div class="project-content">
+          <span class="project-tag">CDC & ClickHouse</span>
+          <h3>CDC to Columnar Analytics</h3>
+          <p>Migrated hot analytics workloads to ClickHouse using Debezium for CDC and Flink for real-time transformation, enabling sub-second query responses on billion-row datasets.</p>
+          <div class="project-stats">
+            <div class="stat-item">1B+ rows</div>
+            <div class="stat-item">500ms queries</div>
+            <div class="stat-item">Real-time sync</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.location.href='observability.html'">
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format&fit=crop" alt="Observability Platform">
+        <div class="project-content">
+          <span class="project-tag">Observability</span>
+          <h3>Data Pipeline Monitoring</h3>
+          <p>Built comprehensive observability platform with Prometheus, Grafana, and custom dashboards for monitoring pipeline health, latency, and data quality across all systems.</p>
+          <div class="project-stats">
+            <div class="stat-item">50+ metrics</div>
+            <div class="stat-item">Real-time alerts</div>
+            <div class="stat-item">Root cause analysis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.location.href='camel-integration.html'">
+        <img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?q=80&w=2000&auto=format&fit=crop" alt="Camel Integration">
+        <div class="project-content">
+          <span class="project-tag">Apache Camel</span>
+          <h3>Enterprise Integration Hub</h3>
+          <p>Created a centralized integration platform using Apache Camel to connect disparate systems with standardized error handling, retry mechanisms, and protocol transformation.</p>
+          <div class="project-stats">
+            <div class="stat-item">15+ protocols</div>
+            <div class="stat-item">99.99% reliability</div>
+            <div class="stat-item">Auto-recovery</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="window.location.href='flink-cep.html'">
+        <img src="https://images.unsplash.com/photo-1510511233900-1982d92bd835?q=80&w=2000&auto=format&fit=crop" alt="Stream Processing">
+        <div class="project-content">
+          <span class="project-tag">Stream Processing</span>
+          <h3>Real-time Fraud Detection</h3>
+          <p>Implemented complex event processing pipeline for real-time fraud detection using Flink CEP patterns, machine learning models, and adaptive rule engines.</p>
+          <div class="project-stats">
+            <div class="stat-item">5ms detection</div>
+            <div class="stat-item">95% accuracy</div>
+            <div class="stat-item">Adaptive rules</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn primary">← Back to Home</a>
+  </section>
+
+  <footer>
+    <div>&copy; 2025 supermankalai.com — Created by Kalaiyarasan. All rights reserved.</div>
+    <div class="copy">"With great data comes great responsibility."</div>
+  </footer>
+</body>
+</html>
